@@ -6,7 +6,7 @@ A minimal, modern baseline starter template for static web projects.
 
 - **Modern CSS Reset**: Box-sizing, text-rendering, form element normalization, and accessible focus outlines (`src/css/reset.css`).
 - **Semantic HTML5 Base**: Clean starter template (`src/index.html`).
-- **ES Module Setup**: Safe global environment initializer (`src/js/index.js`).
+- **ES Module Setup**: Clean JavaScript entry point (`src/js/index.js`).
 - **HTML5 Element Test Suite**: Comprehensive visual testing suite (`tests/demo.html`) covering standard HTML5 elements.
 
 ## Project Structure

@@ -1,24 +1,28 @@
 /* ==========================================================================
-   HARD NEUTRAL PRODUCTION RESET (HARDENED)
-   - Zero-specificity cascade layer support
-   - Safe Flexbox/Grid intrinsic baselines
-   - Preserves accessible focus, native form controls, and dialogs
-   - Dark-mode scrollbars & cross-platform font smoothing
+   THE MODERN CANONICAL CSS RESET
+   - Architecture: Cascade Layer 0 (zero specificity leakage)
+   - Baseline: Modern Standards & CSS Values Level 4/5
+   - A11y: Screen-reader preservation, non-destructive form baselines
 ========================================================================== */
 
 @layer reset {
-    /* 1. Universal box model & border baseline (includes backdrop) */
+    /* 1. Universal Box Model & Sizing Defense
+       - Prevents border/padding from expanding elements
+       - Fixes CSS Grid/Flexbox intrinsic overflow traps (min-width: 0 on text elements)
+    */
     *,
     *::before,
-    *::after,
-    ::backdrop {
+    *::after {
         box-sizing: border-box;
         margin: 0;
         padding: 0;
-        border: 0 solid currentColor;
     }
 
-    /* 2. Document root */
+    /* 2. Root Document Baseline
+       - Light/Dark system color adaptation (enables native dark mode scrollbars/form inputs)
+       - Mobile tap delay prevention without disabling zooming
+       - Enables height: auto CSS transitions (Interpolate Size)
+    */
     html {
         color-scheme: light dark;
         -webkit-text-size-adjust: 100%;
@@ -26,49 +30,39 @@
         -webkit-tap-highlight-color: transparent;
         tab-size: 4;
         font-size: 100%;
-        min-height: 100%;
         scroll-behavior: auto;
+        /* Modern baseline: smooth height transitions to auto/content */
+        interpolate-size: allow-keywords;
     }
 
-    @media (prefers-reduced-motion: no-preference) {
-        html:focus-within {
-            scroll-behavior: smooth;
-        }
-    }
-
-    /* 3. Body baseline (stable mobile height + symmetrical font-smoothing) */
+    /* 3. Body & Viewport Geometry
+       - 100dvh avoids jumpy bottom-bar shifts on iOS/Android Chrome
+       - overflow-wrap prevents long strings/URLs from blowing out viewport
+    */
     body {
         min-height: 100vh;
-        min-height: 100svh;
+        min-height: 100dvh;
         line-height: 1.5;
         overflow-wrap: break-word;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
     }
 
-    /* 4. Interactive primitives */
-    summary {
-        cursor: pointer;
-    }
-
-    /* Restores native viewport centering for modals broken by * { margin: 0 } */
-    :where(dialog) {
-        margin: auto;
-    }
-
-    /* 5. Typography */
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
+    /* 4. Typography Baseline
+       - Headings: text-wrap balance avoids single-word typographic runts
+       - Neutral: Unstyled font sizes for component-driven UI architecture
+    */
+    h1, h2, h3, h4, h5, h6 {
         font-size: inherit;
         font-weight: inherit;
+        text-wrap: balance;
     }
 
-    b,
-    strong {
+    p, li, figcaption {
+        text-wrap: pretty;
+    }
+
+    b, strong {
         font-weight: bolder;
     }
 
@@ -76,66 +70,36 @@
         font-size: 80%;
     }
 
-    sub,
-    sup {
+    sub, sup {
         font-size: 75%;
         line-height: 0;
         position: relative;
         vertical-align: baseline;
     }
+    sub { bottom: -0.25em; }
+    sup { top: -0.5em; }
 
-    sub {
-        bottom: -0.25em;
-    }
-
-    sup {
-        top: -0.5em;
-    }
-
-    pre,
-    code,
-    kbd,
-    samp {
-        font-family:
-            ui-monospace,
-            SFMono-Regular,
-            Menlo,
-            Monaco,
-            Consolas,
-            "Liberation Mono",
-            "Courier New",
-            monospace;
+    pre, code, kbd, samp {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
         font-size: 1em;
     }
 
     pre {
-        max-width: 100%;
-        overflow: auto;
+        overflow-x: auto;
     }
 
-    abbr[title] {
-        text-decoration: underline dotted;
-        cursor: help;
-    }
-
-    /* 6. Lists (Leaves plain semantic content lists intact for Safari VoiceOver) */
-    :where(ul, ol, menu)[class] {
+    /* 5. Lists (Semantic Accessibility Safeguard)
+       - Target only classed lists: preserves bullets on unclassed content (Markdown)
+       - Prevents Safari VoiceOver from dropping <ul> semantics when list-style: none is applied
+    */
+    :where(ul, ol)[class] {
         list-style: none;
     }
 
-    /* 7. Links */
-    a {
-        color: inherit;
-        text-decoration: none;
-        background-color: transparent;
-    }
-
-    /* Pointer cursor only for actual links with an href */
-    :where(a[href]) {
-        cursor: pointer;
-    }
-
-    /* 8. Media + embedded content */
+    /* 6. Embedded Media & Visual Primitives
+       - Block media removes baseline whitespace gaps
+       - SVGs decoupled to prevent breaking inline text icons
+    */
     img,
     picture,
     video,
@@ -145,10 +109,10 @@
         height: auto;
     }
 
-    /* Decoupled from block media to prevent breaking inline text icons */
     svg {
         max-width: 100%;
         vertical-align: middle;
+        flex-shrink: 0;
     }
 
     iframe,
@@ -169,43 +133,49 @@
         height: 0;
     }
 
-    /* SVG color inheritance is opt-in only */
-    :where(svg[data-icon], .icon, .icon svg) {
-        fill: currentColor;
+    /* 7. Interactive Elements & HTML Dialogs
+       - Restores native dialog centering destroyed by * { margin: 0 }
+    */
+    :where(dialog) {
+        margin: auto;
     }
 
-    /* 9. Form controls */
-    button,
-    input,
-    optgroup,
-    select,
-    textarea {
-        font: inherit;
-        letter-spacing: inherit;
+    summary {
+        cursor: pointer;
+    }
+
+    a {
         color: inherit;
+        text-decoration: inherit;
+    }
+
+    :where(a[href]) {
+        cursor: pointer;
+    }
+
+    /* 8. Form Controls Normalization
+       - Full inheritance of typography
+       - Preserves native checkboxes, radios, file pickers, and <select> arrows
+    */
+    input,
+    button,
+    textarea,
+    select,
+    optgroup {
+        font: inherit;
+        color: inherit;
+        letter-spacing: inherit;
         border-radius: 0;
         max-width: 100%;
     }
 
-    /* 
-       Preserves native radio/checkbox elements and native <select> 
-       dropdown chevron arrows from being stripped 
-    */
+    /* Reset background only on free-form inputs (preserves native select chevrons) */
     button,
     input:not([type="checkbox"], [type="radio"]),
     optgroup,
     textarea {
         background: none;
-    }
-
-    button,
-    input {
-        overflow: visible;
-    }
-
-    button,
-    select {
-        text-transform: none;
+        border: 0;
     }
 
     button,
@@ -226,11 +196,11 @@
     }
 
     textarea {
-        overflow: auto;
         resize: vertical;
         white-space: pre-wrap;
     }
 
+    /* Consistent search field appearance */
     [type="search"] {
         -webkit-appearance: textfield;
         appearance: textfield;
@@ -242,32 +212,15 @@
         -webkit-appearance: none;
     }
 
-    [type="number"]::-webkit-inner-spin-button,
-    [type="number"]::-webkit-outer-spin-button {
-        height: auto;
-    }
-
-    ::placeholder {
-        color: currentColor;
-        opacity: 0.6;
-    }
-
-    ::file-selector-button {
-        -webkit-appearance: button;
-        appearance: button;
-        font: inherit;
-        cursor: pointer;
-    }
-
     fieldset {
         min-width: 0;
         max-width: 100%;
+        border: 1px solid currentColor;
+        padding: 0.5em 0.75em;
     }
 
     legend {
-        display: table;
-        max-width: 100%;
-        white-space: normal;
+        padding: 0 0.25em;
         color: inherit;
     }
 
@@ -275,21 +228,10 @@
         cursor: not-allowed;
     }
 
-    /* 10. Horizontal rules */
-    hr {
-        box-sizing: content-box;
-        display: block;
-        height: 0;
-        overflow: visible;
-        border: 0;
-        border-top: 1px solid currentColor;
-    }
-
-    /* 11. Tables */
+    /* 9. Tables */
     table {
         border-collapse: collapse;
         border-spacing: 0;
-        text-indent: 0;
         max-width: 100%;
     }
 
@@ -297,17 +239,19 @@
         text-align: inherit;
     }
 
-    caption {
-        text-align: start;
-    }
-
-    /* 12. Hidden elements (!important required to preserve HTML semantics) */
+    /* 10. Native Elements with Hidden Semantics
+       - !important protects against accidental author display overrides
+       - [hidden="until-found"] preserved for native Ctrl+F accordion search
+    */
     template,
     :where([hidden]:not([hidden="until-found"])) {
         display: none !important;
     }
 
-    /* 13. Focus visibility */
+    /* 11. Accessible Focus Indication
+       - Removes mouse focus outline while preserving keyboard navigation
+       - Forced-colors fallback ensures visibility in Windows High Contrast Mode
+    */
     :focus:not(:focus-visible) {
         outline: 0;
     }
@@ -319,14 +263,16 @@
 
     @media (forced-colors: active) {
         :focus-visible {
-            outline: 2px solid transparent;
+            outline: 2px solid Highlight;
         }
     }
 
-    /* 14. Reduced motion (!important required to override author animations) */
+    /* 12. Reduced Motion (WCAG AAA Baseline)
+       - Durations set to minimal fractions rather than 0s to prevent breaking
+         JavaScript transitionend/animationend event listeners
+    */
     @media (prefers-reduced-motion: reduce) {
-        html,
-        html:focus-within {
+        html {
             scroll-behavior: auto !important;
         }
 

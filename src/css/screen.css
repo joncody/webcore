@@ -1,1 +1,6 @@
-@import "reset.css";
+/* Explicit Cascade Layer Ordering */
+@layer reset, base, components, utilities;
+
+@import "reset.css" layer(reset);
+
+/* Author styles below naturally beat @layer reset without specificity battles */

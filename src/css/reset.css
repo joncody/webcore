@@ -1,371 +1,296 @@
 /* ==========================================================================
-   HARD NEUTRAL PRODUCTION RESET
-   - No !important
-   - Flexbox/Grid-friendly sizing baseline
-   - Global outline reset
-   - Keeps native layout primitives neutral
+   HARD NEUTRAL PRODUCTION RESET (HARDENED)
+   - Zero-specificity cascade layer support
+   - Safe Flexbox/Grid intrinsic baselines
+   - Preserves accessible focus and native form controls
 ========================================================================== */
 
-/* 1. Universal box model reset */
-*,
-*::before,
-*::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    border: 0 solid currentColor;
-    outline: 0;
-
-    /*
-      Flexbox/Grid safeguard:
-      allows flex/grid items to shrink instead of blowing out their tracks.
-    */
-    min-width: 0;
-}
-
-/* 2. Document root */
-html {
-    -webkit-text-size-adjust: 100%;
-    -moz-text-size-adjust: 100%;
-    text-size-adjust: 100%;
-    -webkit-tap-highlight-color: transparent;
-    tab-size: 4;
-    font-size: 100%;
-    min-height: 100%;
-    scroll-behavior: auto;
-}
-
-/* Smooth scrolling only when the user has not requested reduced motion */
-@media (prefers-reduced-motion: no-preference) {
-    html:focus-within {
-        scroll-behavior: smooth;
-    }
-}
-
-/* 3. Body baseline */
-body {
-    min-height: 100vh;
-    min-height: 100dvh;
-    line-height: 1.5;
-    overflow-wrap: break-word;
-}
-
-/* 4. HTML5 structural + interactive element display fixes */
-article,
-aside,
-details,
-figcaption,
-figure,
-footer,
-header,
-hgroup,
-main,
-menu,
-nav,
-section,
-search {
-    display: block;
-}
-
-summary {
-    cursor: pointer;
-}
-
-dialog {
-    margin: auto;
-}
-
-/* 5. Typography reset */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    font-size: inherit;
-    font-weight: inherit;
-    overflow-wrap: break-word;
-}
-
-p {
-    overflow-wrap: break-word;
-}
-
-b,
-strong {
-    font-weight: bolder;
-}
-
-small {
-    font-size: 80%;
-}
-
-sub,
-sup {
-    font-size: 75%;
-    line-height: 0;
-    position: relative;
-    vertical-align: baseline;
-}
-
-sub {
-    bottom: -0.25em;
-}
-
-sup {
-    top: -0.5em;
-}
-
-pre,
-code,
-kbd,
-samp {
-    font-family:
-        ui-monospace,
-        SFMono-Regular,
-        Menlo,
-        Monaco,
-        Consolas,
-        "Liberation Mono",
-        "Courier New",
-        monospace;
-    font-size: 1em;
-}
-
-pre {
-    max-width: 100%;
-    overflow: auto;
-}
-
-abbr[title] {
-    text-decoration: underline dotted;
-    cursor: help;
-}
-
-/* 6. Lists */
-ul,
-ol,
-menu {
-    list-style: none;
-}
-
-/* 7. Links */
-a {
-    color: inherit;
-    text-decoration: none;
-    background-color: transparent;
-    cursor: pointer;
-}
-
-/* 8. Media + embedded content */
-img,
-picture,
-video,
-canvas,
-svg {
-    display: block;
-    max-width: 100%;
-    height: auto;
-}
-
-iframe,
-embed,
-object {
-    display: block;
-    max-width: 100%;
-    border: 0;
-}
-
-audio {
-    display: inline-block;
-    max-width: 100%;
-}
-
-audio:not([controls]) {
-    display: none;
-    height: 0;
-}
-
-/*
-   SVG color inheritance is opt-in only.
-   This avoids forcing currentColor onto multi-color SVGs.
-*/
-:where(svg[data-icon], .icon, .icon svg) {
-    fill: currentColor;
-}
-
-/* 9. Form controls */
-button,
-input,
-optgroup,
-select,
-textarea {
-    font: inherit;
-    letter-spacing: inherit;
-    color: inherit;
-    background: none;
-    border-radius: 0;
-    max-width: 100%;
-}
-
-button,
-input {
-    overflow: visible;
-}
-
-button,
-select {
-    text-transform: none;
-}
-
-button,
-[type="button"],
-[type="reset"],
-[type="submit"] {
-    -webkit-appearance: button;
-    appearance: button;
-    cursor: pointer;
-}
-
-button::-moz-focus-inner,
-[type="button"]::-moz-focus-inner,
-[type="reset"]::-moz-focus-inner,
-[type="submit"]::-moz-focus-inner {
-    border-style: none;
-    padding: 0;
-}
-
-textarea {
-    overflow: auto;
-    resize: vertical;
-    white-space: pre-wrap;
-    overflow-wrap: break-word;
-}
-
-[type="search"] {
-    -webkit-appearance: textfield;
-    appearance: textfield;
-    outline-offset: -2px;
-}
-
-[type="search"]::-webkit-search-decoration,
-[type="search"]::-webkit-search-cancel-button,
-[type="search"]::-webkit-search-results-button,
-[type="search"]::-webkit-search-results-decoration {
-    -webkit-appearance: none;
-}
-
-[type="number"]::-webkit-inner-spin-button,
-[type="number"]::-webkit-outer-spin-button {
-    height: auto;
-}
-
-::placeholder {
-    color: currentColor;
-    opacity: 0.6;
-}
-
-::file-selector-button {
-    -webkit-appearance: button;
-    appearance: button;
-    font: inherit;
-    cursor: pointer;
-}
-
-::-webkit-file-upload-button {
-    -webkit-appearance: button;
-    font: inherit;
-    cursor: pointer;
-}
-
-fieldset {
-    min-width: 0;
-    max-width: 100%;
-}
-
-legend {
-    display: table;
-    max-width: 100%;
-    white-space: normal;
-    color: inherit;
-}
-
-progress,
-meter {
-    vertical-align: baseline;
-}
-
-output {
-    display: inline-block;
-}
-
-:disabled {
-    cursor: not-allowed;
-}
-
-/* 10. Horizontal rules */
-hr {
-    box-sizing: content-box;
-    display: block;
-    height: 0;
-    overflow: visible;
-    border: 0;
-    border-top: 1px solid currentColor;
-}
-
-/* 11. Tables */
-table {
-    border-collapse: collapse;
-    border-spacing: 0;
-    text-indent: 0;
-    max-width: 100%;
-}
-
-th {
-    text-align: inherit;
-}
-
-caption {
-    text-align: start;
-}
-
-/* 12. Hidden elements */
-template,
-[hidden] {
-    display: none;
-}
-
-/* 13. Focus visibility
-   Base outlines are reset above.
-   This restores a keyboard-only focus indicator.
-   If you truly want zero focus outlines, remove this block.
-*/
-:focus-visible {
-    outline: 2px solid currentColor;
-    outline-offset: 2px;
-}
-
-@media (forced-colors: active) {
-    :focus-visible {
-        outline: 2px solid transparent;
-    }
-}
-
-/* 14. Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-    html,
-    html:focus-within {
-        scroll-behavior: auto;
-    }
-
+@layer reset {
+    /* 1. Universal box model & border baseline */
     *,
     *::before,
     *::after {
-        animation-duration: 0.01ms;
-        animation-iteration-count: 1;
-        transition-duration: 0.01ms;
-        animation-delay: 0s;
-        transition-delay: 0s;
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        border: 0 solid currentColor;
+    }
+
+    /* 2. Document root */
+    html {
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+        -webkit-tap-highlight-color: transparent;
+        tab-size: 4;
+        font-size: 100%;
+        min-height: 100%;
         scroll-behavior: auto;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+        html:focus-within {
+            scroll-behavior: smooth;
+        }
+    }
+
+    /* 3. Body baseline */
+    body {
+        min-height: 100vh;
+        min-height: 100dvh;
+        line-height: 1.5;
+        overflow-wrap: break-word;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    /* 4. Interactive primitives */
+    summary {
+        cursor: pointer;
+    }
+
+    /* 5. Typography */
+    h1, h2, h3, h4, h5, h6 {
+        font-size: inherit;
+        font-weight: inherit;
+    }
+
+    b, strong {
+        font-weight: bolder;
+    }
+
+    small {
+        font-size: 80%;
+    }
+
+    sub, sup {
+        font-size: 75%;
+        line-height: 0;
+        position: relative;
+        vertical-align: baseline;
+    }
+
+    sub { bottom: -0.25em; }
+    sup { top: -0.5em; }
+
+    pre, code, kbd, samp {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        font-size: 1em;
+    }
+
+    pre {
+        max-width: 100%;
+        overflow: auto;
+    }
+
+    abbr[title] {
+        text-decoration: underline dotted;
+        cursor: help;
+    }
+
+    /* 6. Lists (Leaves plain semantic content lists intact for Safari VoiceOver) */
+    :where(ul, ol, menu)[class] {
+        list-style: none;
+    }
+
+    /* 7. Links */
+    a {
+        color: inherit;
+        text-decoration: none;
+        background-color: transparent;
+        cursor: pointer;
+    }
+
+    /* 8. Media + embedded content */
+    img,
+    picture,
+    video,
+    canvas {
+        display: block;
+        max-width: 100%;
+        height: auto;
+    }
+
+    svg {
+        max-width: 100%;
+        vertical-align: middle;
+    }
+
+    iframe,
+    embed,
+    object {
+        display: block;
+        max-width: 100%;
+        border: 0;
+    }
+
+    audio {
+        display: inline-block;
+        max-width: 100%;
+    }
+
+    audio:not([controls]) {
+        display: none;
+        height: 0;
+    }
+
+    :where(svg[data-icon], .icon, .icon svg) {
+        fill: currentColor;
+    }
+
+    /* 9. Form controls (Protects radio/checkbox native styling) */
+    button,
+    input,
+    optgroup,
+    select,
+    textarea {
+        font: inherit;
+        letter-spacing: inherit;
+        color: inherit;
+        border-radius: 0;
+        max-width: 100%;
+    }
+
+    button,
+    input:not([type="checkbox"], [type="radio"]),
+    optgroup,
+    select,
+    textarea {
+        background: none;
+    }
+
+    button, input {
+        overflow: visible;
+    }
+
+    button, select {
+        text-transform: none;
+    }
+
+    button,
+    [type="button"],
+    [type="reset"],
+    [type="submit"] {
+        -webkit-appearance: button;
+        appearance: button;
+        cursor: pointer;
+    }
+
+    button::-moz-focus-inner,
+    [type="button"]::-moz-focus-inner,
+    [type="reset"]::-moz-focus-inner,
+    [type="submit"]::-moz-focus-inner {
+        border-style: none;
+        padding: 0;
+    }
+
+    textarea {
+        overflow: auto;
+        resize: vertical;
+        white-space: pre-wrap;
+    }
+
+    [type="search"] {
+        -webkit-appearance: textfield;
+        appearance: textfield;
+        outline-offset: -2px;
+    }
+
+    [type="search"]::-webkit-search-decoration,
+    [type="search"]::-webkit-search-cancel-button {
+        -webkit-appearance: none;
+    }
+
+    [type="number"]::-webkit-inner-spin-button,
+    [type="number"]::-webkit-outer-spin-button {
+        height: auto;
+    }
+
+    ::placeholder {
+        color: currentColor;
+        opacity: 0.6;
+    }
+
+    ::file-selector-button {
+        -webkit-appearance: button;
+        appearance: button;
+        font: inherit;
+        cursor: pointer;
+    }
+
+    fieldset {
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    legend {
+        display: table;
+        max-width: 100%;
+        white-space: normal;
+        color: inherit;
+    }
+
+    :disabled {
+        cursor: not-allowed;
+    }
+
+    /* 10. Horizontal rules */
+    hr {
+        box-sizing: content-box;
+        display: block;
+        height: 0;
+        overflow: visible;
+        border: 0;
+        border-top: 1px solid currentColor;
+    }
+
+    /* 11. Tables */
+    table {
+        border-collapse: collapse;
+        border-spacing: 0;
+        text-indent: 0;
+        max-width: 100%;
+    }
+
+    th { text-align: inherit; }
+    caption { text-align: start; }
+
+    /* 12. Hidden elements (Exception: !important required to preserve HTML semantics) */
+    template,
+    :where([hidden]:not([hidden="until-found"])) {
+        display: none !important;
+    }
+
+    /* 13. Focus visibility */
+    :focus:not(:focus-visible) {
+        outline: 0;
+    }
+
+    :focus-visible {
+        outline: 2px solid currentColor;
+        outline-offset: 2px;
+    }
+
+    @media (forced-colors: active) {
+        :focus-visible {
+            outline: 2px solid transparent;
+        }
+    }
+
+    /* 14. Reduced motion (Exception: !important required to override author animations) */
+    @media (prefers-reduced-motion: reduce) {
+        html,
+        html:focus-within {
+            scroll-behavior: auto !important;
+        }
+
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+            animation-delay: 0s !important;
+            transition-delay: 0s !important;
+            scroll-behavior: auto !important;
+        }
     }
 }
